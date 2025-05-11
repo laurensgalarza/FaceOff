@@ -1,74 +1,52 @@
-from model import FaceOff
-from dataset import SiameseDataset
-from torchvision import transforms, datasets
 import torch
-import torch.utils.data
-import torchvision.utils
-from torch.utils.data import DataLoader
-from matplotlib import pyplot as plt
 import torch.nn.functional as F
-import numpy as np
+from torchvision import transforms
+from PIL import Image
 from facenet_pytorch import MTCNN
+import matplotlib.pyplot as plt
+from model import FaceOff 
 
-def imshow(img, text=None):
-    npimg = img.numpy()
-    plt.axis("off")
-    if text:
-        plt.text(60, 8, text, style='italic', fontweight='bold',
-                 bbox={'facecolor':'white', 'alpha':0.8, 'pad':10})
-    plt.imshow(np.transpose(npimg, (1, 2, 0)))
+def show_result(img1, img2, distance, threshold):
+    fig, axes = plt.subplots(1, 2)
+    axes[0].imshow(img1)
+    axes[0].set_title("Image 1")
+    axes[0].axis("off")
+    
+    axes[1].imshow(img2)
+    axes[1].set_title("Image 2")
+    axes[1].axis("off")
+
+    plt.suptitle(f"Dissimilarity: {distance:.2f} | Predicted: {'Same' if distance < threshold else 'Different'}")
     plt.show()
 
-def main():
-    # Load the trained model
-    model_path = "./output/siamese_model.pth"
+def infer(image_path1, image_path2, model_path="./output/siamese_model.pth", threshold=1.0):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
     model = FaceOff().to(device)
     model.load_state_dict(torch.load(model_path, map_location=device))
     model.eval()
 
-    # Transform
-    transformation = transforms.Compose([
-        transforms.Resize((100, 100)),
-        transforms.ToTensor()
-    ])
-    mtcnn = MTCNN(image_size=100, margin=0)
+    mtcnn = MTCNN(image_size=112, margin=10)
 
-    # Load test dataset
-    # folder_dataset_test = datasets.ImageFolder(root="./archive/")
-    siamese_dataset = SiameseDataset(
-        # imageFolderDataset=folder_dataset_test,
-        makeup_dir="./archive/with_makeup",
-        no_makeup_dir="./archive/no_makeup",
-        transform=transformation,
-        mtcnn=mtcnn
-    )
+    # Load and preprocess images
+    img1 = Image.open(image_path1).convert("RGB")
+    img2 = Image.open(image_path2).convert("RGB")
 
-    test_dataloader = torch.utils.data.DataLoader(
-        siamese_dataset,
-        num_workers=2,  # <-- change to 0 if debugging
-        batch_size=1,
-        shuffle=True
-    )
+    face1 = mtcnn(img1)
+    face2 = mtcnn(img2)
 
-    # Run inference
-    dataiter = iter(test_dataloader)
-    x0, _, _ = next(dataiter)
+    if face1 is None or face2 is None:
+        print("Face detection failed on one or both images.")
+        return
 
-    for i in range(10):
-        img0, img1, label = next(dataiter)
-        
-        output1, output2 = model(img0.to(device), img1.to(device))
-        euclidean_distance = F.pairwise_distance(output1, output2)
+    face1 = face1.unsqueeze(0).to(device)
+    face2 = face2.unsqueeze(0).to(device)
 
-        concatenated = torch.cat((img0, img1), 0)
-        threshold = 1.0  # You can tune this based on validation set
-        prediction = "Same" if euclidean_distance.item() < threshold else "Different"
+    with torch.no_grad():
+        output1, output2 = model(face1, face2)
+        distance = F.pairwise_distance(output1, output2).item()
 
-        imshow(torchvision.utils.make_grid(concatenated),   
-            f'Dissimilarity: {euclidean_distance.item():.2f} | Predicted: {prediction} | Ground Truth: {"Same" if label.item() == 0 else "Different"}')
+    show_result(img1, img2, distance, threshold)
 
-if __name__ == "__main__":
-    main()
-
+if __name__ == '__main__':
+    # Replace with actual file paths
+    infer("archive/no_makeup/5.jpg", "archive/with_makeup/5.jpg")
