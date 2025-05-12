@@ -11,6 +11,17 @@ Face pairs are passed into a Siamese model. During training, it:
 
 This helps the model learn implicitly which facial features are consistent across makeup changes — such as face shape, eye position, or bone structure.
 
+## Tech Stack
+
+- Python
+- PyTorch
+- OpenCV
+- matplotlib
+- torchvision
+- facenet-pytorch
+- NumPy
+- Pillow
+
 ## Running the Project
 
 ### Terminal Command to install libraries used:
@@ -38,5 +49,5 @@ neural network is already saved.
 ## Future Implementation Considerations
 
 - Include a wider range of facial variations beyond makeup, such as lighting, expression, angle, ethnicity, etc.
- Integrate data featuring exaggerated makeup and gender-nonconforming identities to challenge the model’s assumptions and expand its training scope.
+- Integrate data featuring exaggerated makeup and gender-nonconforming people to challenge the model’s assumptions and expand its training scope.
 - Consider further edge cases where face shape may be altered by heavy cosmetics or accessories.
