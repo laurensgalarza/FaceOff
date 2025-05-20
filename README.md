@@ -50,3 +50,6 @@ neural network is already saved.
 - Include a wider range of facial variations beyond makeup, such as lighting, expression, angle, ethnicity, etc.
 - Integrate data featuring exaggerated makeup and gender-nonconforming people to challenge the model’s assumptions and expand its training scope.
 - Consider further edge cases where face shape may be altered by heavy cosmetics or accessories.
+
+### GitHub Link
+https://github.com/laurensgalarza/FaceOff/tree/triplet
