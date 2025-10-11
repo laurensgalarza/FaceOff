@@ -63,4 +63,3 @@ neural network is already saved.
 
 ### GitHub Link
 https://github.com/laurensgalarza/FaceOff/tree/triplet
-
