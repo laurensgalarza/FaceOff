@@ -6,7 +6,7 @@ from facenet_pytorch import MTCNN
 import matplotlib.pyplot as plt
 from model import FaceOff
 
-def infer(image_path1, image_path2, model_path="./output/triplet_model.pth", threshold=1.0):
+def infer(image_path1, image_path2, model_path="./output/trained_model.pth", threshold=1.0):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Load trained model
@@ -52,9 +52,7 @@ def infer(image_path1, image_path2, model_path="./output/triplet_model.pth", thr
     plt.show()
 
 if __name__ == '__main__':
-    # Replace with actual file paths
-    # 15 and 6
-    # 3 and 3
+    # 3 and 3 similarity is 1.01 
     # 44 and 44 probably because they have different lighting
     # 34 and 34 probably because the dataset doesn't have a variety of skin colors
-    infer("archive/no_makeup/30.png", "archive/with_makeup/30.png")
+    infer("archive/test_images/no_makeup/1.png", "archive/test_images/no_makeup/1.png")

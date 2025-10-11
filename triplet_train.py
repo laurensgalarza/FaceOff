@@ -15,7 +15,7 @@ def train():
     full_dataset = TripletDataset("archive/with_makeup", "archive/no_makeup", mtcnn) 
     val_size = int(0.2 * len(full_dataset))
     train_size = len(full_dataset) - val_size
-    train_dataset = random_split(full_dataset, [train_size, val_size])
+    train_dataset, val_dataset = random_split(full_dataset, [train_size, val_size])
 
     train_loader = DataLoader(train_dataset, shuffle=True, batch_size=16, num_workers=0)
     # val_loader = DataLoader(val_dataset, shuffle=False, batch_size=16, num_workers=0)
@@ -51,7 +51,7 @@ def train():
         avg_train_loss = total_loss / len(train_loader)
         print(f"Epoch {epoch+1}/30 | Train Loss: {avg_train_loss:.4f}")
 
-    torch.save(model.state_dict(), "./output/triplet_model.pth")
+    torch.save(model.state_dict(), "./output/trained_model.pth")
     print("Model saved.")
 
 if __name__ == "__main__":
