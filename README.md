@@ -32,8 +32,6 @@ Different: > 1
 - Pillow
 
 ## Running the Project
-### FINAL CODE IS PLACED IN THE TRIPLET BRANCH
-
 ### Terminal Command to install libraries used:
 pip install torch torchvision pillow matplotlib opencv-python numpy facenet-pytorch
 
