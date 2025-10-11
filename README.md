@@ -2,6 +2,12 @@
 
 FaceOff is a facial recognition system that compares two images and predicts whether they depict the same person, even when one includes makeup. It uses a Siamese neural network trained to focus on facial features that stay consistent despite alterations resulting from makeup. This was completed as our final project for a Computer Vision course.
 
+## Output Examples
+
+<img width="1440" alt="Ex 1" src="https://github.com/laurensgalarza/FaceOff/blob/main/output_images/Screenshot%202025-10-11%20at%203.17.05%E2%80%AFPM.png">
+
+<img width="1440" alt="Ex 2" src="https://github.com/laurensgalarza/FaceOff/blob/main/output_images/Screenshot%202025-10-11%20at%204.57.49%E2%80%AFPM.png">
+
 ## How It Works
 
 Face pairs are passed into a Triplet Loss model. During training, it:
@@ -48,12 +54,6 @@ triplet_test.py is used for testing.
 To test different pictures, just change the file paths at the bottom of inference.py.
 You do not need to run every file again to test different pictures because the trained 
 neural network is already saved. 
-
-## Output Examples
-
-<img width="1440" alt="Ex 1" src="">
-
-<img width="1440" alt="Ex 2" src="">
 
 ## Future Implementation Considerations
 
